@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [keyword, setKeyword] = useState('');
+
+
+  const handleClick = async () => {
+    const url = `http://localhost:3001/api/item?query=${encodeURIComponent(keyword)}`;
+
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      console.log('商品データ:', data);
+    } catch (error) {
+      console.error('エラー:', error);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ textAlign: 'center', marginTop: '100px' }}>
+      <h1>商品検索</h1>
+      <input
+        type="text"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        placeholder="キーワードを入力してください"
+        style={{ padding: '10px', fontSize: '16px' }}
+      />
+      <button onClick={handleClick} style={{ marginLeft: '10px', padding: '10px 20px' }}>
+        検索
+      </button>
+    </div>
+  );
 }
 
-export default App
+export default App;
+
+
