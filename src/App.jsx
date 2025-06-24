@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import CategorySection from './CategorySection.jsx';
 
 function App() {
   const [keyword, setKeyword] = useState('');
@@ -18,7 +19,8 @@ function App() {
 
   return (
     <div style={{ textAlign: 'center', padding: '40px' }}>
-      <h1>Yahooショッピング</h1>
+      <h1>LOGO</h1>
+      
       <input
         type="text"
         value={keyword}
@@ -29,7 +31,7 @@ function App() {
       <button onClick={handleClick} style={{ marginLeft: '10px', padding: '10px 20px' }}>
         検索
       </button>
-
+      <CategorySection />
       <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: '30px' }}>
         {Array.isArray(items) &&
           items.map((item, i) => (
