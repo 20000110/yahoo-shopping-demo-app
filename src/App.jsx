@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import CategorySection from './CategorySection.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [keyword, setKeyword] = useState('');
+  const [items, setItems] = useState([]);
+
+  const handleClick = async () => {
+    if (!keyword) return;
+    const url = `http://localhost:3001/api/item?query=${encodeURIComponent(keyword)}`;
+    try {
+      const res = await fetch(url);
+      const data = await res.json();
+      setItems(data.hits);
+    } catch (err) {
+      console.error('エラー:', err);
+    }
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div style={{ textAlign: 'center', padding: '40px' }}>
+      <h1>LOGO</h1>
+      
+      <input
+        type="text"
+        value={keyword}
+        onChange={(e) => setKeyword(e.target.value)}
+        placeholder="何をお探しですか？"
+        style={{ padding: '10px', fontSize: '16px', width: '250px' }}
+      />
+      <button onClick={handleClick} style={{ marginLeft: '10px', padding: '10px 20px' }}>
+        検索
+      </button>
+      <CategorySection />
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', marginTop: '30px' }}>
+        {Array.isArray(items) &&
+          items.map((item, i) => (
+            <div key={i} style={{ border: '1px solid #ccc', margin: '10px', padding: '10px', width: '200px' }}>
+              <h3>{item.name}</h3>
+              <img src={item.image.medium} alt={item.name} style={{ width: '100%' }} />
+              <p>価格: {item.price}円</p>
+            </div>
+          ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
